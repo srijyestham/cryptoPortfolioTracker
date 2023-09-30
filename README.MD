@@ -1,7 +1,9 @@
 # cryptoPortfolioTracker
 
-Run the program by executing : chmod +x
+Make the file executable by running  : chmod +x
 
 
-Each of 3 Express Backend Servers have individual File in express-server folder.
+Server Setup
 
+Each of 3 Express Backend Servers have individual Files in express-server folder.
+They are identified by their port number.
