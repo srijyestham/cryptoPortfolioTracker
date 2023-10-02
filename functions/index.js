@@ -16,5 +16,5 @@ main.use(bodyParser.urlencoded({ extended: false }));
 const webAPI = getAPI(main);
 module.exports = { webAPI };
 
-const investorRoutes = require("./routes/investors");
-app.use("/", investorRoutes);
+const userRoutes = require("./routes/user");
+app.use("/", userRoutes);
