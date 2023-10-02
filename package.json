@@ -1,15 +1,9 @@
 {
-  "name": "crypto_portfolio_tracker",
+  "name": "csbc1k-mod8-mvc",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
-    "express": "^4.18.2"
+    "firebase-tools": "^11.10.0"
   }
 }
