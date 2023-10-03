@@ -116,15 +116,10 @@ const getPosition = async (req, res) => {
     }
 
     const positionModel = new PositionModel();
-
     const positions = await positionModel.retrieve(req.params.investorId);
 
-    let positionPrice = [];
-    try {
-      positionPrice = (await coinGeckoAxios.get('/coins/markets?vs_currency=USD')).data;
-    } catch (error) {
-      console.log(error);
-    }
+    const tokenModel = new TokenModel();
+    const positionPrice = (await tokenModel.retrievePrice()).tokenPrices;
 
     for (idx in positions.positions) {
       let usdUnit = 0;

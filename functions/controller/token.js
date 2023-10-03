@@ -1,5 +1,5 @@
 const { coinGeckoAxios } = require("../config/axios");
-const { Token, TokenModel } = require("../model/token");
+const { Token, TokenModel, TokenPrice } = require("../model/token");
 
 const syncToken = async () => {
   try {
@@ -18,6 +18,23 @@ const syncToken = async () => {
   }
 };
 
+const syncTokenPrice = async () => {
+  try {
+    const tokenModel = new TokenModel();
+    const tokenPriceData = await coinGeckoAxios.get('/coins/markets?vs_currency=USD');
+
+    await tokenModel.createPrice(new TokenPrice({
+      tokenPrices: tokenPriceData.data,
+      updatedAt: new Date(),
+    }));
+
+    return;
+  } catch (error) {
+    console.log(error);
+    return;
+  }
+}
+
 const getTokens = async (req, res) => {
   try {
     const tokenModel = new TokenModel();
@@ -35,4 +52,4 @@ const getTokens = async (req, res) => {
   }
 }
 
-module.exports = { syncToken, getTokens };
+module.exports = { syncToken, syncTokenPrice, getTokens };

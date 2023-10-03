@@ -1,7 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const { initApp, getAPI } = require("./config/firebase");
-const { syncToken } = require("./controller/token");
+const { syncToken, syncTokenPrice } = require("./controller/token");
 const { syncExchange } = require("./controller/exchange");
 
 // initialize firebase to access its services
@@ -10,6 +10,11 @@ initApp();
 // Sync data from Coingecko
 syncToken();
 syncExchange();
+syncTokenPrice();
+
+setInterval(function() {
+  syncTokenPrice();
+}, 60 * 1000);
 
 // initialize express
 const app = express();
