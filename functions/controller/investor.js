@@ -18,9 +18,11 @@ const createInvestorValidate = ajv.compile(createInvestorSchema)
 
 const createInvestor = async (req, res) => {
   try {
-    const isValid = await createInvestorValidate(req.body)
+    const reqBody = JSON.parse(req.body);
+    const isValid = await createInvestorValidate(reqBody)
     if (!isValid) {
-      return res.status(400).send(createInvestorValidate.errors)
+      const valError = createInvestorValidate.errors;
+      return res.status(400).send(`Please check input: ${valError[0].dataPath.substring(1)}. It ${valError[0].message}.`);
     }
 
     const investorModel = new InvestorModel();
@@ -28,19 +30,21 @@ const createInvestor = async (req, res) => {
 
     await investorModel.create(new Investor({
       id: investorId,
-      username: req.body.username,
+      username: reqBody.username,
       createdAt: new Date(),
       updatedAt: new Date(),
       isRemoved: false,
     }));
 
-    res.status(201).json({
+    console.log(`Successfully create investor ${investorId}. Data: ${JSON.stringify(reqBody)}`);
+
+    return res.status(201).json({
       investorId,
-      message: "successfully added user",
+      message: "successfully added investor",
     });
   } catch (error) {
-    console.log(error)
-    res.status(400).json({
+    console.log(error);
+    return res.status(400).json({
       error: error,
     });
   }
@@ -62,20 +66,27 @@ const deleteInvestor = async (req, res) => {
   try {
     const isValid = deleteInvestorValidate(req.params)
     if (!isValid) {
-      return res.status(400).send(deleteInvestorValidate)
+      const valError = deleteInvestorValidate.errors;
+      return res.status(400).send(`Please check input: ${valError[0].dataPath.substring(1)}. It ${valError[0].message}.`);
     }
 
     const investorModel = new InvestorModel();
+    const investorData = await investorModel.retrieve(req.params.investorId);
+    if (!investorData) {
+      return res.status(400).send("Invalid Investor ID");
+    }
 
     await investorModel.remove(req.params.investorId);
 
-    res.status(200).json({
+    console.log(`Successfully delete investor ${req.params.investorId}.`);
+
+    return res.status(200).json({
       investorId: req.params.investorId,
       message: "successfully deleted investor",
     });
   } catch (error) {
-    console.log(error)
-    res.status(400).json({
+    console.log(error);
+    return res.status(400).json({
       error: error,
     });
   }

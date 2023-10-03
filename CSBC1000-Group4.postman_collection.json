@@ -1,0 +1,162 @@
+{
+	"info": {
+		"_postman_id": "8b3325bf-74bb-403b-9c36-310acc124f5a",
+		"name": "CSBC1000-Group4",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "12874134"
+	},
+	"item": [
+		{
+			"name": "Create investor",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"mhking\"\n}"
+				},
+				"url": {
+					"raw": "{{URL}}/investor",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"investor"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get tokens",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/token",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get exchanges",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/exchange",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"exchange"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create position",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"investorId\": \"8ae44525-de9d-4826-9af2-bc4e5075b1a3\",\n    \"tokenId\": \"bitcoin\",\n    \"exchangeId\": \"binance\",\n    \"value\": \"1.2\"\n}"
+				},
+				"url": {
+					"raw": "{{URL}}/position",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"position"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get position by investor",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/position/788ad520-de62-435d-860f-5f855fc88bae",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"position",
+						"788ad520-de62-435d-860f-5f855fc88bae"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update position",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"investorId\": \"788ad520-de62-435d-860f-5f855fc88bae\",\n    \"positionId\": \"0a0c07b1-1306-45c6-9b94-ddb526ff21c6\",\n    \"value\": \"2\"\n}"
+				},
+				"url": {
+					"raw": "{{URL}}/position",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"position"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete position",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/position/788ad520-de62-435d-860f-5f855fc88bae/0a0c07b1-1306-45c6-9b94-ddb526ff21c6",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"position",
+						"788ad520-de62-435d-860f-5f855fc88bae",
+						"0a0c07b1-1306-45c6-9b94-ddb526ff21c6"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete investor",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{URL}}/investor/ba405ab6-3126-42f5-96ec-9d8ee8fb5136",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"investor",
+						"ba405ab6-3126-42f5-96ec-9d8ee8fb5136"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -10,8 +10,11 @@ const syncExchange = async () => {
       exchanges: exchangeData.data,
       updatedAt: new Date(),
     }));
+
+    return;
   } catch (error) {
     console.log(error);
+    return;
   }
 };
 
@@ -20,12 +23,13 @@ const getExchanges = async (req, res) => {
     const exchangeModel = new ExchangeModel();
     const exchangeData = (await exchangeModel.retrieve());
 
-    res.status(200).json({
+    console.log("Successfully get exchange");
+    return res.status(200).json({
       data: exchangeData
     });
   } catch (error) {
-    console.log(error)
-    res.status(400).json({
+    console.log(error);
+    return res.status(400).json({
       error: error,
     });
   }

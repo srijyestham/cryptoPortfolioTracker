@@ -7,6 +7,10 @@ const { syncExchange } = require("./controller/exchange");
 // initialize firebase to access its services
 initApp();
 
+// Sync data from Coingecko
+syncToken();
+syncExchange();
+
 // initialize express
 const app = express();
 const main = express();
@@ -29,7 +33,3 @@ app.use("/exchange", exchangeRoutes);
 
 const positionRoutes = require("./routes/position");
 app.use("/position", positionRoutes);
-
-// Sync data from Coingecko
-syncToken();
-syncExchange();

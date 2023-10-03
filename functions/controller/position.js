@@ -32,9 +32,10 @@ const createPositionValidate = ajv.compile(createPositionSchema)
 const createPosition = async (req, res) => {
   try {
     const reqBody = JSON.parse(req.body);
-    const isValid = createPositionValidate(reqBody)
+    const isValid = createPositionValidate(reqBody);
     if (!isValid) {
-      return res.status(400).send(createPositionValidate.errors)
+      const valError = createPositionValidate.errors;
+      return res.status(400).send(`Please check input: ${valError[0].dataPath.substring(1)}. It ${valError[0].message}.`);
     }
 
     const investorModel = new InvestorModel();
@@ -73,13 +74,15 @@ const createPosition = async (req, res) => {
       isRemoved: false,
     }));
 
-    res.status(201).json({
+    console.log(`Successfully create position ${positionId}. Data: ${JSON.stringify(reqBody)}`);
+
+    return res.status(201).json({
       positionId,
       message: "successfully created position",
     });
   } catch (error) {
-    console.log(error)
-    res.status(400).json({
+    console.log(error);
+    return res.status(400).json({
       error: error,
     });
   }
@@ -99,9 +102,10 @@ const getPositionValidate = ajv.compile(getPositionSchema)
 
 const getPosition = async (req, res) => {
   try {
-    const isValid = getPositionValidate(req.params)
+    const isValid = getPositionValidate(req.params);
     if (!isValid) {
-      return res.status(400).send(getPositionValidate.errors)
+      const valError = getPositionValidate.errors;
+      return res.status(400).send(`Please check input: ${valError[0].dataPath.substring(1)}. It ${valError[0].message}.`);
     }
 
     const investorModel = new InvestorModel();
@@ -114,23 +118,30 @@ const getPosition = async (req, res) => {
 
     const positions = await positionModel.retrieve(req.params.investorId);
 
-    const positionPrice = (await coinGeckoAxios.get('/coins/markets?vs_currency=USD')).data;
+    let positionPrice = [];
+    try {
+      positionPrice = (await coinGeckoAxios.get('/coins/markets?vs_currency=USD')).data;
+    } catch (error) {
+      console.log(error);
+    }
 
     for (idx in positions.positions) {
       let usdUnit = 0;
-      const unit = positionPrice.find((p) => p.id === positions.positions[idx].tokenId)
+      const unit = positionPrice.find((p) => p.id === positions.positions[idx].tokenId);
       if (unit) {
         usdUnit = unit.current_price;
       };
-      positions.positions[idx].usdValue = usdUnit * Number(positions.positions[idx].value)
+      positions.positions[idx].usdValue = usdUnit * Number(positions.positions[idx].value);
     }
 
-    res.status(200).json({
+    console.log(`Successfully get position from investor ${req.params.investorId}.`);
+
+    return res.status(200).json({
       data: positions,
     });
   } catch (error) {
-    console.log(error)
-    res.status(400).json({
+    console.log(error);
+    return res.status(400).json({
       error: error,
     });
   }
@@ -157,9 +168,10 @@ const updatePositionValidate = ajv.compile(updatePositionSchema)
 const updatePosition = async (req, res) => {
   try {
     const reqBody = JSON.parse(req.body);
-    const isValid = updatePositionValidate(reqBody)
+    const isValid = updatePositionValidate(reqBody);
     if (!isValid) {
-      return res.status(400).send(updatePositionValidate)
+      const valError = updatePositionValidate.errors;
+      return res.status(400).send(`Please check input: ${valError[0].dataPath.substring(1)}. It ${valError[0].message}.`);
     }
 
     const investorModel = new InvestorModel();
@@ -176,13 +188,15 @@ const updatePosition = async (req, res) => {
 
     await positionModel.update(reqBody.investorId, { id: reqBody.positionId, value: reqBody.value });
 
-    res.status(201).json({
+    console.log(`Successfully update position ${reqBody.positionId}. Data: ${JSON.stringify(reqBody)}`);
+
+    return res.status(201).json({
       positionId: reqBody.positionId,
       message: "successfully updated position",
     });
   } catch (error) {
-    console.log(error)
-    res.status(400).json({
+    console.log(error);
+    return res.status(400).json({
       error: error,
     });
   }
@@ -205,9 +219,10 @@ const deletePositionValidate = ajv.compile(deletePositionSchema)
 
 const deletePosition = async (req, res) => {
   try {
-    const isValid = deletePositionValidate(req.params)
+    const isValid = deletePositionValidate(req.params);
     if (!isValid) {
-      return res.status(400).send(deletePositionValidate)
+      const valError = deletePositionValidate.errors;
+      return res.status(400).send(`Please check input: ${valError[0].dataPath.substring(1)}. It ${valError[0].message}.`);
     }
 
     const investorModel = new InvestorModel();
@@ -224,13 +239,15 @@ const deletePosition = async (req, res) => {
 
     await positionModel.remove(req.params.investorId, req.params.positionId);
 
-    res.status(201).json({
+    console.log(`Successfully delete position ${req.params.positionId}.`);
+
+    return res.status(201).json({
       positionId: req.params.positionId,
       message: "successfully deleted position",
     });
   } catch (error) {
-    console.log(error)
-    res.status(400).json({
+    console.log(error);
+    return res.status(400).json({
       error: error,
     });
   }

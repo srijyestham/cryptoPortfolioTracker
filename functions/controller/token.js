@@ -10,8 +10,11 @@ const syncToken = async () => {
       tokens: tokenData.data,
       updatedAt: new Date(),
     }));
+
+    return;
   } catch (error) {
     console.log(error);
+    return;
   }
 };
 
@@ -20,12 +23,13 @@ const getTokens = async (req, res) => {
     const tokenModel = new TokenModel();
     const tokenData = (await tokenModel.retrieve());
 
-    res.status(200).json({
+    console.log("Successfully get token");
+    return res.status(200).json({
       data: tokenData
     });
   } catch (error) {
-    console.log(error)
-    res.status(400).json({
+    console.log(error);
+    return res.status(400).json({
       error: error,
     });
   }
