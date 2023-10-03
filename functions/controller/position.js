@@ -4,6 +4,7 @@ const { InvestorModel } = require("../model/investor");
 const { TokenModel } = require("../model/token");
 const { ExchangeModel } = require("../model/exchange");
 const { coinGeckoAxios } = require("../config/axios");
+const { BigNumber } = require("bignumber.js");
 const Ajv = require("ajv");
 
 const ajv = new Ajv();
@@ -22,7 +23,7 @@ const createPositionSchema = {
     },
     value: {
       type: 'string',
-      pattern: /^[0-9.]+$/.toString().slice(1, -1)
+      pattern: /^-?\d+\.?\d*$/.toString().slice(1, -1)
     }
   },
   required:['investorId', 'tokenId', 'exchangeId', 'value']
@@ -131,7 +132,7 @@ const getPosition = async (req, res) => {
       if (unit) {
         usdUnit = unit.current_price;
       };
-      positions.positions[idx].usdValue = usdUnit * Number(positions.positions[idx].value);
+      positions.positions[idx].usdValue = new BigNumber(positions.positions[idx].value).multipliedBy(usdUnit).toString();
     }
 
     console.log(`Successfully get position from investor ${req.params.investorId}.`);
