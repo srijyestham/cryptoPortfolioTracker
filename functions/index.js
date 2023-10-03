@@ -1,6 +1,8 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const { initApp, getAPI } = require("./config/firebase");
+const { syncToken } = require("./controller/token");
+const { syncExchange } = require("./controller/exchange");
 
 // initialize firebase to access its services
 initApp();
@@ -16,5 +18,18 @@ main.use(bodyParser.urlencoded({ extended: false }));
 const webAPI = getAPI(main);
 module.exports = { webAPI };
 
-const userRoutes = require("./routes/user");
-app.use("/", userRoutes);
+const investorRoutes = require("./routes/investor");
+app.use("/investor", investorRoutes);
+
+const tokenRoutes = require("./routes/token");
+app.use("/token", tokenRoutes);
+
+const exchangeRoutes = require("./routes/exchange");
+app.use("/exchange", exchangeRoutes);
+
+const positionRoutes = require("./routes/position");
+app.use("/position", positionRoutes);
+
+// Sync data from Coingecko
+syncToken();
+syncExchange();

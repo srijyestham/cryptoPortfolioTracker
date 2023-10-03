@@ -1,28 +1,69 @@
 const { getDB } = require("../config/firebase");
 
-const db = getDB();
-const positionCollection = "position";
+class Position {
+  constructor({id, tokenId, exchangeId, value, createdAt, updatedAt, isRemoved}) {
+    this.id = id;
+    this.tokenId = tokenId;
+    this.exchangeId = exchangeId;
+    this.value = value;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
+    this.isRemoved = isRemoved;
+  }
+}
 
-const create = async (position) => {
-  await db
-    .collection(positionCollection)
-    .doc(position.id)
-    .set(Object.assign({}, position));
-};
+class PositionModel {
+  constructor() {
+    this.db = getDB();
+    this.positionCollection = "position";
+  }
 
-const retrieve = async (id) => {
-  return await (await db.collection(positionCollection).doc(id).get()).data();
-};
+  create = async (accountId, position) => {
+    let accountPositions = (await this.db.collection(this.positionCollection).doc(accountId).get()).data();
+    if (accountPositions) {
+      accountPositions = { positions: [Object.assign({}, position), ...accountPositions.positions] };
+    } else {
+      accountPositions = { positions: [Object.assign({}, position)] };
+    }
 
-const update = async (id, position) => {
-  await db
-    .collection(positionCollection)
-    .doc(id)
-    .set(position, { merge: true });
-};
+    await this.db
+      .collection(this.positionCollection)
+      .doc(accountId)
+      .set(Object.assign({}, accountPositions));
+  };
+  
+  retrieve = async (accountId) => {
+    const positionData = (await this.db.collection(this.positionCollection).doc(accountId).get()).data();
+    if (positionData) {
+      positionData.positions = positionData.positions.filter((pos) => pos.isRemoved === false);
+      return positionData;
+    }
+    return { positions: [] };
+  };
+  
+  update = async (accountId, position) => {
+    const accountPositions = (await this.db.collection(this.positionCollection).doc(accountId).get()).data();
+    const accountPosition = accountPositions.positions.find((pos) => pos.id === position.id);
+    accountPosition.value = position.value;
+    accountPosition.updatedAt = new Date();
+    accountPositions.positions = [accountPosition, ...accountPositions.positions.filter((pos) => pos.id !== position.id)];
+    await this.db
+      .collection(this.positionCollection)
+      .doc(accountId)
+      .set(accountPositions, { merge: true });
+  };
+  
+  remove = async (accountId, positionId) => {
+    const accountPositions = (await this.db.collection(this.positionCollection).doc(accountId).get()).data();
+    const accountPosition = accountPositions.positions.find((pos) => pos.id === positionId);
+    accountPosition.isRemoved = true;
+    accountPosition.updatedAt = new Date();
+    accountPositions.positions = [accountPosition, ...accountPositions.positions.filter((pos) => pos.id !== positionId)];
+    await this.db
+      .collection(this.positionCollection)
+      .doc(accountId)
+      .set(accountPositions, { merge: true });
+  };
+}
 
-const remove = async (id) => {
-  await db.collection(positionCollection).doc(id).delete();
-};
-
-module.exports = { create, retrieve, update, remove };
+module.exports = { Position, PositionModel };

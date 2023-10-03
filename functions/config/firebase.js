@@ -2,7 +2,7 @@ const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 
 const initApp = () => {
-  admin.initializeApp(functions.config().firebase);
+  admin.initializeApp({});
 };
 
 const getDB = () => {
