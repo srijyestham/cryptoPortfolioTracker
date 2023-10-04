@@ -68,7 +68,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"investorId\": \"8ae44525-de9d-4826-9af2-bc4e5075b1a3\",\n    \"tokenId\": \"bitcoin\",\n    \"exchangeId\": \"binance\",\n    \"value\": \"1.2\"\n}"
+					"raw": "{\n    \"investorId\": \"<investorId>\",\n    \"tokenId\": \"ethereum\",\n    \"exchangeId\": \"binance\",\n    \"value\": \"1.2\"\n}"
 				},
 				"url": {
 					"raw": "{{URL}}/position",
@@ -88,13 +88,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{URL}}/position/788ad520-de62-435d-860f-5f855fc88bae",
+					"raw": "{{URL}}/position/<investorId>",
 					"host": [
 						"{{URL}}"
 					],
 					"path": [
 						"position",
-						"788ad520-de62-435d-860f-5f855fc88bae"
+						"<investorId>"
 					]
 				}
 			},
@@ -107,7 +107,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"investorId\": \"788ad520-de62-435d-860f-5f855fc88bae\",\n    \"positionId\": \"0a0c07b1-1306-45c6-9b94-ddb526ff21c6\",\n    \"value\": \"2\"\n}"
+					"raw": "{\n    \"investorId\": \"<investorId>\",\n    \"positionId\": \"<positionId>\",\n    \"value\": \"2\"\n}"
 				},
 				"url": {
 					"raw": "{{URL}}/position",
@@ -127,14 +127,14 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "{{URL}}/position/788ad520-de62-435d-860f-5f855fc88bae/0a0c07b1-1306-45c6-9b94-ddb526ff21c6",
+					"raw": "{{URL}}/position/<investorId>/<positionId>",
 					"host": [
 						"{{URL}}"
 					],
 					"path": [
 						"position",
-						"788ad520-de62-435d-860f-5f855fc88bae",
-						"0a0c07b1-1306-45c6-9b94-ddb526ff21c6"
+						"<investorId>",
+						"<positionId>"
 					]
 				}
 			},
@@ -146,13 +146,13 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "{{URL}}/investor/ba405ab6-3126-42f5-96ec-9d8ee8fb5136",
+					"raw": "{{URL}}/investor/<investorId>",
 					"host": [
 						"{{URL}}"
 					],
 					"path": [
 						"investor",
-						"ba405ab6-3126-42f5-96ec-9d8ee8fb5136"
+						"<investorId>"
 					]
 				}
 			},
