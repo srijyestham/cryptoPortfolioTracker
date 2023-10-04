@@ -14,7 +14,7 @@ syncTokenPrice();
 
 setInterval(function() {
   syncTokenPrice();
-}, 60 * 1000);
+}, 5 * 60 * 1000);
 
 // initialize express
 const app = express();
